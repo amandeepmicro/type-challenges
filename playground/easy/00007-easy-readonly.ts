@@ -31,14 +31,14 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyReadonly<T> = any
+type MyReadonly<T> = {
+  readonly [key in keyof T]: T[key]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
-type cases = [
-  Expect<Equal<MyReadonly<Todo1>, Readonly<Todo1>>>,
-]
+type cases = [Expect<Equal<MyReadonly<Todo1>, Readonly<Todo1>>>]
 
 interface Todo1 {
   title: string
@@ -55,3 +55,9 @@ interface Todo1 {
   > View solutions: https://tsch.js.org/7/solutions
   > More Challenges: https://tsch.js.org
 */
+
+/**
+ * My understanding
+ * keyof - The keyof operator takes an object type and produces a string or numeric literal union of its keys.
+ * in: take the value of the union type, mainly used for the construction of arrays and objects
+ */

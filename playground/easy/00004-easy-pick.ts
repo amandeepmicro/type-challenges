@@ -66,3 +66,33 @@ interface Expected2 {
   > View solutions: https://tsch.js.org/4/solutions
   > More Challenges: https://tsch.js.org
 */
+
+/**
+ * My understanding
+ * keyof - The keyof operator takes an object type and produces a string or numeric literal union of its keys.
+ * in: take the value of the union type, mainly used for the construction of arrays and objects
+ */
+
+type User = {
+  name: string
+  age: number
+}
+
+type AttributeOfUser = keyof User // "name" | "age"
+
+function getUserAttributeValue(user: User, attribute: AttributeOfUser) {
+  return user[attribute]
+}
+
+console.log(getUserAttributeValue({ name: 'John', age: 3 }, 'age'))
+
+type CountryAttributes = 'name' | 'language'
+
+type Country = {
+  [key in CountryAttributes]: string
+}
+
+const India: Country = {
+  name: 'India',
+  language: 'Hindi, English',
+}

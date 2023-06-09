@@ -22,7 +22,19 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyAwaited<T> = any
+type Thenable<T> = {
+  then: (onfulfilled: (arg: T) => unknown) => unknown
+}
+
+type MyAwaited<T extends Thenable<any> | Promise<any>> = T extends Promise<
+  infer Inner
+>
+  ? Inner extends Promise<any>
+    ? MyAwaited<Inner>
+    : Inner
+  : T extends Thenable<infer U>
+  ? U
+  : false
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -38,7 +50,7 @@ type cases = [
   Expect<Equal<MyAwaited<Y>, { field: number }>>,
   Expect<Equal<MyAwaited<Z>, string | number>>,
   Expect<Equal<MyAwaited<Z1>, string | boolean>>,
-  Expect<Equal<MyAwaited<T>, number>>,
+  Expect<Equal<MyAwaited<T>, number>>
 ]
 
 // @ts-expect-error
