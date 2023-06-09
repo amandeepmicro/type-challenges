@@ -30,14 +30,16 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyOmit<T, K> = any
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
 type cases = [
   Expect<Equal<Expected1, MyOmit<Todo, 'description'>>>,
-  Expect<Equal<Expected2, MyOmit<Todo, 'description' | 'completed'>>>,
+  Expect<Equal<Expected2, MyOmit<Todo, 'description' | 'completed'>>>
 ]
 
 // @ts-expect-error
@@ -64,3 +66,11 @@ interface Expected2 {
   > View solutions: https://tsch.js.org/3/solutions
   > More Challenges: https://tsch.js.org
 */
+
+/**
+ * Explanation
+ * You can filter out keys by producing never via a conditional type
+ * This is the key idea of this solution.
+ * As of TypeScript 4.1, we can make use of key remapping via as and inline the Exclude:
+ * https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as
+ */
